@@ -28,7 +28,7 @@ docker run --rm -it \
     -p 8080:80 muell-io
 
 # Test the API endpoint
-curl http://localhost:8080/cgi-bin/output.cgi
+curl http://localhost:8080/
 ```
 
 ### Development Commands
@@ -111,7 +111,7 @@ docker run --rm muell-io apachectl configtest
 ### Manual Testing
 1. Build image: `docker build --no-cache -t muell-io .`
 2. Run with test environment variables
-3. Access endpoint: `http://localhost:8080/cgi-bin/output.cgi`
+3. Access endpoint: `http://localhost:8080`
 4. Verify JSON structure and content
 
 ### Test Environment Variables

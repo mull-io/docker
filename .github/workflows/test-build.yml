@@ -1,0 +1,50 @@
+name: Test Docker Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build --no-cache -t muell-io-test .
+
+      - name: Test container startup
+        run: |
+          docker run -d --name muell-io-test \
+            -e MUELL_STREET="Schürhornweg" \
+            -e MUELL_HOUSE_NUMBER="1" \
+            -e MUELL_ZIP="33649" \
+            -e MUELL_CITY="Bielefeld" \
+            -e MUELL_COUNTRY="DE" \
+            -p 8080:80 muell-io-test
+
+      - name: Wait for container to start
+        run: sleep 3
+
+      - name: Test API endpoint
+        run: |
+          response=$(curl -s http://localhost:8080/)
+          echo "Response: $response"
+          
+          # Check if response contains expected JSON structure
+          if echo "$response" | grep -q '"date"'; then
+            echo "✅ API endpoint working correctly"
+          else
+            echo "❌ API endpoint not working"
+            exit 1
+          fi
+
+      - name: Cleanup
+        run: |
+          docker stop muell-io-test
+          docker rm muell-io-test
