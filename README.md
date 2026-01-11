@@ -34,6 +34,6 @@ docker run --rm -it \
 | MUELL_CITY         | Bielefeld     |
 | MUELL_COUNTRY      | DE            |
 
-Call http://localhost:8080/cgi-bin/output.cgi
+Call http://localhost:8080/
 
 @todo https://docs.github.com/de/actions/tutorials/publish-packages/publish-docker-images
