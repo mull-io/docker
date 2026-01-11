@@ -39,7 +39,7 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -49,19 +49,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
 
-      - name: Generate image digest
-        id: digest
-        run: |
-          digest=$(docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} --format '{{.Manifest.Digest}}')
-          echo "digest=$digest" >> $GITHUB_OUTPUT
-
       - name: Output image details
         run: |
           echo "📦 Published Docker image:"
           echo "Registry: ${{ env.REGISTRY }}"
           echo "Image: ${{ env.IMAGE_NAME }}"
           echo "Tags: ${{ steps.meta.outputs.tags }}"
-          echo "Digest: ${{ steps.digest.outputs.digest }}"
           echo ""
           echo "🚀 To pull the image:"
           echo "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
